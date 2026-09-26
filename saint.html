@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Saint — All The Catholic Saints</title>
+<meta name="description" content="Learn about a Catholic saint: feast day, life, patronages, writings, images, sources, and related saints.">
+<meta name="theme-color" content="#0f1115">
+<style>
+:root{--bg:#0f1115;--card:#1a1d24;--text:#e8e6e3;--muted:#a0a0a0;--accent:#c9a227;--soft:#8b7355;--border:#2a2e38}
+*{box-sizing:border-box;margin:0;padding:0}
+body{animation:pageIn .45s ease both;font-family:Georgia,"Times New Roman",serif;background:var(--bg);color:var(--text);line-height:1.65}
+header{background:#0a0c10;border-bottom:1px solid var(--border);padding:1rem 1.25rem}
+header .inner{max-width:1000px;margin:auto;display:flex;justify-content:space-between;align-items:center;gap:1rem}
+header a{color:var(--accent);text-decoration:none}
+main{max-width:1000px;margin:auto;padding:2rem 1.25rem 4rem}
+.back{color:var(--soft);text-decoration:none;display:inline-block;margin-bottom:1.4rem}
+.hero{display:grid;grid-template-columns:220px 1fr;gap:2rem;align-items:start}
+.portrait{width:220px;height:280px;object-fit:cover;background:#11131a;border:1px solid var(--border);border-radius:5px}
+.placeholder{display:flex;align-items:center;justify-content:center;color:var(--accent);font-size:4rem}
+h1{font-size:clamp(2rem,5vw,3.2rem);font-weight:normal;line-height:1.1;margin-bottom:.55rem}
+.epithet{color:var(--muted);font-style:italic;font-size:1.05rem}
+.badges{display:flex;gap:.4rem;flex-wrap:wrap;margin:1rem 0}
+.badge{border:1px solid #4b4123;color:var(--accent);padding:.2rem .5rem;border-radius:3px;font-size:.76rem}
+.actions{display:flex;gap:.55rem;flex-wrap:wrap;margin-top:1.1rem}
+button,.action{font-family:inherit;background:transparent;border:1px solid var(--border);color:var(--muted);padding:.55rem .8rem;border-radius:4px;cursor:pointer;text-decoration:none}
+button,.action{transition:transform .18s ease,border-color .2s,color .2s,background .2s,box-shadow .2s}button:active,.action:active{transform:scale(.96);box-shadow:0 0 0 2px rgba(201,162,39,.1)}button:active,.action:active{transform:scale(.97)}button:hover,.action:hover{border-color:var(--accent);color:var(--accent)}
+@keyframes pageIn{from{opacity:0}to{opacity:1}}
+section{margin-top:2.2rem;padding-top:1.6rem;border-top:1px solid var(--border);animation:sectionIn .5s ease both}@keyframes sectionIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+h2{font-size:1.25rem;font-weight:normal;color:var(--accent);margin-bottom:.65rem}
+.bio{font-size:1.03rem;color:#ddd}
+.info{display:grid;grid-template-columns:repeat(2,1fr);gap:.8rem}
+.item{background:var(--card);border:1px solid var(--border);padding:.85rem 1rem;border-radius:5px}
+.label{font-size:.72rem;color:var(--soft);text-transform:uppercase;letter-spacing:.08em}
+.value{margin-top:.2rem}
+.links{display:flex;gap:.6rem;flex-wrap:wrap}
+.quote{border-left:3px solid var(--accent);padding:.8rem 1rem;background:#171a20;font-style:italic}
+.related{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:.6rem}
+.related a{color:var(--text);background:var(--card);border:1px solid var(--border);padding:.65rem .8rem;text-decoration:none;border-radius:4px}
+.related a:hover{border-color:var(--accent);color:var(--accent)}
+#loading{text-align:center;padding:5rem;color:var(--muted)}
+footer{text-align:center;border-top:1px solid var(--border);padding:2rem;color:var(--muted);font-size:.8rem}
+footer a{color:var(--soft)}
+@media(max-width:700px){.hero{grid-template-columns:1fr}.portrait{width:min(260px,100%);height:300px}.info{grid-template-columns:1fr}}
+</style>
+<link rel="manifest" href="manifest.webmanifest">
+</head>
+<body>
+<header><div class="inner"><a href="index.html">All The Catholic Saints ✝</a><a href="saints.html">Saints Directory</a></div></header>
+<main>
+<div id="loading">Opening the saint…</div>
+<div id="content" style="display:none">
+<a class="back" href="saints.html">← Back to Saints</a>
+<div class="hero">
+ <div id="portraitWrap"></div>
+ <div>
+  <h1 id="name"></h1><div class="epithet" id="epithet"></div><div class="badges" id="badges"></div>
+  <div class="actions"><button id="fav">☆ Favorite</button><button id="copy">Copy saint information</button><a id="wiki" class="action" target="_blank" rel="noopener">Wikipedia</a></div>
+ </div>
+</div>
+<section><h2>Life</h2><p class="bio" id="bio"></p></section>
+<section><h2>At a Glance</h2><div class="info" id="info"></div></section>
+<section><h2>Patronages & Intercession</h2><p id="patronage"></p></section>
+<section><h2>Why He / She Is Remembered</h2><p id="why"></p></section>
+<section id="quoteSection" style="display:none"><h2>Quote</h2><div class="quote" id="quote"></div></section>
+<section><h2>Writings & Further Reading</h2><p style="color:var(--muted);margin-bottom:.8rem">Where a saint has surviving writings, biographies, or books, these links provide starting points for further research rather than reproducing copyrighted text.</p><div class="links" id="links"></div></section>
+<section><h2>Scripture Connections</h2><p style="color:var(--muted)">A saint's life is best read in light of Sacred Scripture. Use the links below to explore Bible passages associated with the themes of this life.</p><div class="links" style="margin-top:.7rem"><a class="action" target="_blank" rel="noopener" href="https://www.biblegateway.com/">Read Scripture</a><a class="action" target="_blank" rel="noopener" href="https://bible.usccb.org/bible">USCCB Bible</a></div></section>
+<section><h2>Related Saints</h2><div class="related" id="related"></div></section>
+<section><h2>Sources</h2><p id="sources" style="color:var(--muted)"></p></section>
+</div>
+</main>
+<footer><p><a href="index.html">Home</a> · <a href="saints.html">Saints Directory</a></p><p style="margin-top:.5rem">For the glory of God and the good of souls.</p></footer>
+
+<script src="local-saints.js"></script>
+<script src="https://raw.githubusercontent.com/SwamiAkash108/saints-database/main/saints_ABC.js"></script>
+<script src="https://raw.githubusercontent.com/SwamiAkash108/saints-database/main/saints_DEF.js"></script>
+<script src="https://raw.githubusercontent.com/SwamiAkash108/saints-database/main/saints_GHI.js"></script>
+<script src="https://raw.githubusercontent.com/SwamiAkash108/saints-database/main/saints_JKL.js"></script>
+<script src="https://raw.githubusercontent.com/SwamiAkash108/saints-database/main/saints_MNO.js"></script>
+<script src="https://raw.githubusercontent.com/SwamiAkash108/saints-database/main/saints_PQR.js"></script>
+<script src="https://raw.githubusercontent.com/SwamiAkash108/saints-database/main/saints_STU.js"></script>
+<script src="https://raw.githubusercontent.com/SwamiAkash108/saints-database/main/saints_WXYZ.js"></script>
+<script>
+const local=(typeof LOCAL_SAINTS!=="undefined"?LOCAL_SAINTS:[]);
+let catalog=[];
+for(const k of ["S_ABC","S_DEF","S_GHI","S_JKL","S_MNO","S_PQR","S_STU","S_WXYZ"])if(Array.isArray(window[k]))catalog.push(...window[k].filter(x=>x.t!=="Orthodox").map(x=>({name:x.n,feast:x.f||"",bio:x.b||"",relics:x.r||""})));
+function norm(s){return s.normalize("NFD").replace(/\p{Diacritic}/gu,"").toLowerCase().replace(/^st\.?\s+/,"").trim()}
+const rich=new Map(local.map(x=>[norm(x.name),x]));
+rich.set(norm("José Sánchez del Río"),{name:"José Sánchez del Río",aliases:["Jose Sanchez del Rio","José Luis Sánchez del Río","Joselito"],feast:"10 February",birth:"28 March 1913",death:"10 February 1928",nationality:"Mexican",type:"Layman / Martyr",century:"20th",intercession:"Persecuted Christians, children, adolescents, Sahuayo",canonized:"16 October 2016 by Pope Francis",knownFor:"Mexican layman and Cristero martyr remembered for remaining faithful to Christ during religious persecution.",notes:"The confirmation saint for this website’s creator"});
+rich.set(norm("Carlo Acutis"),{name:"Carlo Acutis",aliases:["Carlo Maria Acutis","Saint Carlo Acutis"],feast:"12 October",birth:"3 May 1991",death:"12 October 2006",nationality:"Italian",type:"Layman / Computer enthusiast",century:"20th–21st",intercession:"Young people, computer users, evangelization, and the internet",canonized:"7 September 2025 by Pope Leo XIV",knownFor:"Italian Catholic teenager known for his devotion to the Eucharist and for using computers and digital media to share the Catholic faith and catalog Eucharistic miracles.",notes:"This website was deeply inspired by Saint Carlo Acutis — by his life, his love for Jesus, his use of technology for evangelization, and especially the website he created to catalog Eucharistic miracles.",image:"https://upload.wikimedia.org/wikipedia/en/c/c8/Carlo_Acutis_%28born_1991%29.jpg",website:"https://www.miracolieucaristici.org/"});
+function esc(x){return String(x||"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]))}
+async function wikiSummary(name){
+ const candidates=[name,name.replace(/^Saint\s+/i,""),name.replace(/^St\.?\s+/i,"")];
+ for(const c of [...new Set(candidates)]){
+  try{const r=await fetch("https://en.wikipedia.org/api/rest_v1/page/summary/"+encodeURIComponent(c.replace(/ /g,"_")));if(r.ok){const x=await r.json();if(x.type!=="https://mediawiki.org/wiki/HyperSwitch/errors/not_found")return x}}catch(e){}
+ }
+ return null;
+}
+function choose(){
+ const p=new URLSearchParams(location.search);let q=p.get("name");
+ if(p.get("random")) q=catalog[Math.floor(Math.random()*catalog.length)]?.n || "Francis of Assisi";
+ if(!q)q="José Sánchez del Río";
+ return q;
+}
+(async()=>{
+ const requested=choose(); const key=norm(requested);
+ let s=rich.get(key)||catalog.find(x=>norm(x.name)===key)||catalog.find(x=>norm(x.name).includes(key));
+ if(!s){s={name:requested}}
+ const display={...s};
+
+ const cachedImage=localStorage.getItem("acs-img:"+display.name); if(cachedImage && !display.image) display.image=cachedImage;
+ const title=`${display.name} — All The Catholic Saints`;document.title=title;document.querySelector('meta[name="description"]').content=`Learn about ${display.name}: feast day, life, patronages, writings, images, and Catholic sources.`;
+ document.getElementById("name").textContent=display.name;
+ document.getElementById("epithet").textContent=display.desc||display.type||"Catholic saint";
+ document.getElementById("badges").innerHTML=[display.type,display.century,display.nationality].filter(Boolean).map(x=>`<span class="badge">${esc(x)}</span>`).join("");
+ document.getElementById("bio").textContent=display.bio||"A full biography is not yet stored locally. Use the source links below to continue researching this saint.";
+ document.getElementById("patronage").textContent=display.intercession||"Patronage information is not yet stored locally.";
+ document.getElementById("why").textContent=display.knownFor||display.bio||"Research this saint through the linked Catholic and historical sources.";
+ const info=[
+  ["Feast Day",display.feast],["Born",display.birth],["Died",display.death],["Country / Region",display.nationality],
+  ["Occupation / State in Life",display.type],["Century",display.century],["Canonization",display.canonized],["Symbols / Notes",display.notes]
+ ].filter(x=>x[1]);
+ document.getElementById("info").innerHTML=info.map(x=>`<div class="item"><div class="label">${esc(x[0])}</div><div class="value">${esc(x[1])}</div></div>`).join("");
+ if(display.image)document.getElementById("portraitWrap").innerHTML=`<img class="portrait" src="${esc(display.image)}" alt="Image of ${esc(display.name)}" loading="eager">`;
+ else document.getElementById("portraitWrap").innerHTML=`<div class="portrait placeholder">✝</div>`;
+ document.getElementById("wiki").href=display.wiki||`https://en.wikipedia.org/wiki/${encodeURIComponent(display.name.replace(/ /g,"_"))}`;
+ const q=(display.name.includes("José Sánchez del Río")?"“Viva Cristo Rey! Viva la Virgen de Guadalupe!”":null);
+ if(q){document.getElementById("quoteSection").style.display="block";document.getElementById("quote").textContent=q}
+ const works=[
+  ["Wikisource search",`https://en.wikisource.org/w/index.php?search=${encodeURIComponent(display.name)}`],
+  ["Internet Archive search",`https://archive.org/search?query=${encodeURIComponent(display.name+" saint")}`],
+  ["Google Books search",`https://books.google.com/books?q=${encodeURIComponent(display.name)}`]
+ ];
+ document.getElementById("links").innerHTML=works.map(x=>`<a class="action" target="_blank" rel="noopener" href="${x[1]}">${x[0]}</a>`).join("")+((display.website)?`<a class="action" target="_blank" rel="noopener" href="${display.website}">Carlo’s Eucharistic Miracles Website</a>`:"");
+ const fav=JSON.parse(localStorage.getItem("acs-favorites")||"[]");const fb=document.getElementById("fav");
+ function setFav(){const yes=fav.includes(display.name);fb.textContent=yes?"★ Favorited":"☆ Favorite"} setFav();
+ fb.onclick=()=>{const i=fav.indexOf(display.name);if(i>=0)fav.splice(i,1);else fav.push(display.name);localStorage.setItem("acs-favorites",JSON.stringify(fav));setFav()};
+ document.getElementById("copy").onclick=async()=>{const text=`${display.name}\nFeast Day: ${display.feast||"Unknown"}\nBorn: ${display.birth||"Unknown"}\nDied: ${display.death||"Unknown"}\nPatronage: ${display.intercession||"Unknown"}\n\n${display.bio||""}`;try{await navigator.clipboard.writeText(text);document.getElementById("copy").textContent="Copied ✓";setTimeout(()=>document.getElementById("copy").textContent="Copy saint information",1500)}catch(e){}};
+ let related=catalog.filter(x=>x.n!==display.name).filter(x=>(display.feast&&x.f===display.feast)||(display.type&&x.b&&x.b.toLowerCase().includes(String(display.type).split("/")[0].trim().toLowerCase()))).slice(0,8);
+ document.getElementById("related").innerHTML=related.map(x=>`<a href="saint.html?name=${encodeURIComponent(x.n)}">${esc(x.n)}</a>`).join("")||"<span style='color:var(--muted)'>Related saints will be added as the database is enriched.</span>";
+ document.getElementById("sources").innerHTML=`<a class="action" target="_blank" rel="noopener" href="${display.wiki||"#"}">Wikipedia</a> <span style="margin-left:.5rem">·</span> <a class="action" target="_blank" rel="noopener" href="https://www.vatican.va/">Vatican</a> <span style="margin-left:.5rem">·</span> <a class="action" target="_blank" rel="noopener" href="https://www.newadvent.org/cathen/">New Advent / Catholic Encyclopedia</a>`;
+ const recent=JSON.parse(localStorage.getItem("acs-recent")||"[]").filter(x=>x!==display.name);recent.unshift(display.name);localStorage.setItem("acs-recent",JSON.stringify(recent.slice(0,12)));
+ document.getElementById("loading").style.display="none";document.getElementById("content").style.display="block";
+ const portrait=document.querySelector("#portraitWrap img");
+ wikiSummary(display.name).then(w=>{if(!w)return; const wikiImg=w.thumbnail?.source||""; if(wikiImg){localStorage.setItem("acs-img:"+display.name,wikiImg)} if(wikiImg && (!portrait || portrait.getAttribute("src")==="")){document.getElementById("portraitWrap").innerHTML=`<img class="portrait" src="${esc(wikiImg)}" alt="Image of ${esc(display.name)}" loading="eager" fetchpriority="high" decoding="async">`;} if(!display.bio && w.extract){document.getElementById("bio").textContent=w.extract;document.getElementById("why").textContent=w.extract;} if(w.content_urls?.desktop?.page){document.getElementById("wiki").href=w.content_urls.desktop.page;}}).catch(()=>{});
+})();
+</script>
+</body>
+</html>

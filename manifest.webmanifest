@@ -1,0 +1,10 @@
+{
+  "name": "All The Catholic Saints",
+  "short_name": "Catholic Saints",
+  "description": "A quiet place to learn about the holy men and women of the Church.",
+  "start_url": "index.html",
+  "display": "standalone",
+  "background_color": "#030b13",
+  "theme_color": "#030a11",
+  "icons": [{"src":"app-icon.svg","sizes":"any","type":"image/svg+xml","purpose":"any maskable"}]
+}

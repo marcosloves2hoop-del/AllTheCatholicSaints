@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Saints Directory — All The Catholic Saints</title>
+<meta name="description" content="Search and browse a large Catholic saints catalog by name, feast day, country, patronage, occupation, century, and category.">
+<meta name="theme-color" content="#0f1115">
+<style>
+:root{--bg:#0f1115;--card:#1a1d24;--hover:#22262f;--text:#e8e6e3;--muted:#9a9a9a;--accent:#c9a227;--soft:#8b7355;--border:#2a2e38}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,"Times New Roman",serif;background:var(--bg);color:var(--text);line-height:1.55;min-height:100vh}
+header{background:#0a0c10;border-bottom:1px solid var(--border);padding:1rem 1.25rem;position:sticky;top:0;z-index:20}
+.header-inner{max-width:1200px;margin:auto;display:flex;align-items:center;gap:1rem;flex-wrap:wrap}
+.logo{font-size:1.15rem;color:var(--accent);text-decoration:none;white-space:nowrap}
+.search-wrap{flex:1;min-width:230px;position:relative}
+#search{width:100%;background:var(--card);border:1px solid var(--border);color:var(--text);padding:.68rem 1rem .68rem 2.35rem;font-size:.95rem;font-family:inherit;border-radius:4px}
+#search:focus{outline:none;border-color:var(--accent)}
+.search-icon{position:absolute;left:.75rem;top:50%;transform:translateY(-50%);color:var(--muted)}
+.header-btn{background:none;border:1px solid var(--border);color:var(--muted);padding:.6rem .75rem;border-radius:4px;cursor:pointer;font-family:inherit}
+.header-btn:hover{border-color:var(--accent);color:var(--accent)}
+main{max-width:1200px;margin:auto;padding:2rem 1.25rem 4rem}
+h1{font-size:2rem;font-weight:normal;margin-bottom:.3rem}
+.page-intro{color:var(--muted);margin-bottom:1.25rem}
+.toolbar{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:.55rem;margin-bottom:1.2rem}
+select,.text-filter{background:var(--card);border:1px solid var(--border);color:var(--text);padding:.62rem .7rem;font-family:inherit;border-radius:4px}
+select:focus,.text-filter:focus{outline:none;border-color:var(--accent)}
+.text-filter{width:100%}
+.az-bar{display:flex;flex-wrap:wrap;gap:.3rem;padding-bottom:1.2rem;margin-bottom:1.2rem;border-bottom:1px solid var(--border)}
+.az{width:2rem;height:2rem;background:transparent;border:1px solid var(--border);color:var(--muted);cursor:pointer;border-radius:3px}
+.az:hover,.az.active{border-color:var(--accent);color:var(--accent);background:#201d12}
+.results{color:var(--muted);font-size:.88rem;margin-bottom:1rem;display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:.8rem}
+.card{animation:cardIn .42s ease both;}@keyframes cardIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.card{background:var(--card);border:1px solid var(--border);border-radius:6px;padding:1rem;display:flex;gap:.9rem;cursor:pointer;transition:.2s}
+.card:hover{background:var(--hover);border-color:#454b58;transform:translateY(-1px)}
+.thumb{width:62px;height:78px;object-fit:cover;border-radius:4px;background:#101217;flex:none;transition:transform .25s ease,opacity .25s ease}.card:hover .thumb{transform:scale(1.03)}
+.thumb.placeholder{display:flex;align-items:center;justify-content:center;color:var(--accent);font-size:1.7rem}
+.card h2{font-size:1.05rem;font-weight:normal;margin-bottom:.2rem}
+.meta{color:var(--muted);font-size:.82rem}
+.tag{display:inline-block;border:1px solid #49422c;color:var(--accent);font-size:.68rem;padding:.12rem .35rem;border-radius:3px;margin-top:.35rem}
+.pagination{display:flex;justify-content:center;gap:.35rem;flex-wrap:wrap;margin-top:1.5rem}
+.page{background:transparent;border:1px solid var(--border);color:var(--muted);padding:.45rem .7rem;cursor:pointer;border-radius:3px}
+.page.active,.page:hover{border-color:var(--accent);color:var(--accent)}
+footer{text-align:center;padding:2rem 1rem;border-top:1px solid var(--border);color:var(--muted);font-size:.8rem}
+footer a{color:var(--soft)}
+@media(max-width:850px){.toolbar{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:560px){main{padding:1.25rem .8rem 3rem}.toolbar{grid-template-columns:1fr 1fr}.grid{grid-template-columns:1fr}.header-inner{align-items:stretch}.logo{display:none}}
+</style>
+<link rel="manifest" href="manifest.webmanifest">
+</head>
+<body>
+<header><div class="header-inner">
+<a class="logo" href="index.html">All The Catholic Saints ✝</a>
+<div class="search-wrap"><span class="search-icon">⌕</span><input id="search" placeholder="Search a saint, alias, feast day, patronage, place..." autocomplete="off"></div>
+<button class="header-btn" id="randomBtn">Random</button>
+<button class="header-btn" id="favoritesBtn">Favorites</button>
+<button class="header-btn" id="themeBtn">☼</button>
+</div></header>
+
+<main>
+<h1>Directory of Saints</h1>
+<p class="page-intro">Search the Catholic catalog, then open any saint for a dedicated page with biography, images, sources, writings, and related research.</p>
+
+<div class="toolbar">
+<select id="category"><option value="">All categories</option><option>Martyr</option><option>Pope</option><option>Bishop</option><option>Priest</option><option>Religious</option><option>Virgin</option><option>Founder</option><option>Doctor of the Church</option><option>Layperson</option></select>
+<select id="century"><option value="">All centuries</option></select>
+<select id="month"><option value="">All feast months</option></select>
+<select id="country"><option value="">All countries / regions</option></select>
+<select id="sort"><option value="name">A–Z</option><option value="feast">Feast day</option></select>
+<select id="source"><option value="all">All Catholic catalog entries</option><option value="rich">Detailed local records</option></select>
+</div>
+
+<nav class="az-bar" id="az"></nav>
+<div class="results"><span id="count">Loading saint catalog…</span><span id="status"></span></div>
+<div class="grid" id="grid"></div>
+<div class="pagination" id="pagination"></div>
+</main>
+<footer><p><a href="index.html">← Return Home</a> · <a href="saint.html?random=1">Random Saint</a></p><p style="margin-top:.5rem">Catalog data is a research aid; verify important details against Catholic sources.</p></footer>
+
+<script src="local-saints.js"></script>
+<script src="https://raw.githubusercontent.com/SwamiAkash108/saints-database/main/saints_ABC.js"></script>
+<script src="https://raw.githubusercontent.com/SwamiAkash108/saints-database/main/saints_DEF.js"></script>
+<script src="https://raw.githubusercontent.com/SwamiAkash108/saints-database/main/saints_GHI.js"></script>
+<script src="https://raw.githubusercontent.com/SwamiAkash108/saints-database/main/saints_JKL.js"></script>
+<script src="https://raw.githubusercontent.com/SwamiAkash108/saints-database/main/saints_MNO.js"></script>
+<script src="https://raw.githubusercontent.com/SwamiAkash108/saints-database/main/saints_PQR.js"></script>
+<script src="https://raw.githubusercontent.com/SwamiAkash108/saints-database/main/saints_STU.js"></script>
+<script src="https://raw.githubusercontent.com/SwamiAkash108/saints-database/main/saints_WXYZ.js"></script>
+<script>
+const LOCAL=(typeof LOCAL_SAINTS!=="undefined"?LOCAL_SAINTS:[]).map(s=>({
+ name:s.name, aliases:[s.name], feast:s.feast||"", birth:s.birth||"", death:s.death||"",
+ country:s.nationality||"", type:s.type||"", century:s.century||"", patronage:s.intercession||"",
+ bio:s.knownFor||s.notes||"", canonized:s.canonized||"", notes:s.notes||"", rich:true
+}));
+const extra=[];
+for(const k of ["S_ABC","S_DEF","S_GHI","S_JKL","S_MNO","S_PQR","S_STU","S_WXYZ"]){
+ if(Array.isArray(window[k])) extra.push(...window[k].map(x=>({
+  name:x.n,aliases:[x.n],feast:x.f||"",country:"",type:"",century:"",patronage:"",bio:x.b||"",relics:x.r||"",rich:false,tradition:x.t
+ })));
+}
+const byName=new Map();
+[...extra,...LOCAL].forEach(s=>{
+ const key=s.name.normalize("NFD").replace(/\p{Diacritic}/gu,"").toLowerCase();
+ const old=byName.get(key); byName.set(key,old?{...old,...s,rich:old.rich||s.rich}:s);
+});
+let saints=[...byName.values()].filter(s=>s.tradition!=="Orthodox");
+const jose={
+ name:"José Sánchez del Río",aliases:["Jose Sanchez del Rio","José Luis Sánchez del Río","Joselito","St. José Sánchez del Río"],
+ feast:"10 February",birth:"28 March 1913",death:"10 February 1928",country:"Mexican",type:"Layman / Martyr",century:"20th",
+ patronage:"Persecuted Christians, children, adolescents, Sahuayo",canonized:"16 October 2016 by Pope Francis",
+ bio:"Mexican layman and Cristero martyr who remained faithful to Christ during religious persecution. His canonization took place in Saint Peter's Square.",
+ notes:"Confirmation saint of the site creator.",rich:true
+};
+const jk=jose.name.normalize("NFD").replace(/\p{Diacritic}/gu,"").toLowerCase();
+byName.set(jk,jose); saints=[...byName.values()];
+const search=document.getElementById("search"),grid=document.getElementById("grid"),count=document.getElementById("count"),status=document.getElementById("status");
+const pageSize=36; let page=1, letter="", filtered=[];
+const cat=document.getElementById("category"),cent=document.getElementById("century"),month=document.getElementById("month"),country=document.getElementById("country"),sort=document.getElementById("sort"),source=document.getElementById("source");
+function esc(x){return String(x||"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]))}
+function slug(s){return encodeURIComponent(s)}
+function imgFor(s){return s.image||localStorage.getItem("acs-img:"+s.name)||""}
+async function loadThumb(s,el){if(imgFor(s))return;try{const r=await fetch("https://en.wikipedia.org/api/rest_v1/page/summary/"+encodeURIComponent(s.name.replace(/ /g,"_")));if(!r.ok)return;const x=await r.json(),u=x.thumbnail?.source;if(!u)return;localStorage.setItem("acs-img:"+s.name,u);if(el && el.isConnected){el.src=u;el.style.opacity="1"}}catch(e){}}
+function buildFilters(){
+ const centuries=[...new Set(saints.map(s=>s.century).filter(Boolean))].sort();
+ cent.innerHTML='<option value="">All centuries</option>'+centuries.map(x=>`<option>${esc(x)}</option>`).join("");
+ const months=["January","February","March","April","May","June","July","August","September","October","November","December"];
+ month.innerHTML='<option value="">All feast months</option>'+months.map(x=>`<option>${x}</option>`).join("");
+ const countries=[...new Set(saints.map(s=>s.country).filter(Boolean))].sort((a,b)=>a.localeCompare(b));
+ country.innerHTML='<option value="">All countries / regions</option>'+countries.map(x=>`<option>${esc(x)}</option>`).join("");
+}
+function buildAZ(){
+ const letters="ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
+ document.getElementById("az").innerHTML='<button class="az active" data-l="">ALL</button>'+letters.map(x=>`<button class="az" data-l="${x}">${x}</button>`).join("");
+ document.querySelectorAll(".az").forEach(b=>b.onclick=()=>{letter=b.dataset.l;page=1;document.querySelectorAll(".az").forEach(x=>x.classList.remove("active"));b.classList.add("active");render()});
+}
+function matches(s,q){
+ if(!q)return true;
+ const hay=[s.name,...(s.aliases||[]),s.feast,s.country,s.type,s.century,s.patronage,s.bio,s.notes].join(" ").toLowerCase();
+ return hay.includes(q);
+}
+function render(){
+ const q=search.value.trim().toLowerCase();
+ filtered=saints.filter(s=>matches(s,q));
+ if(letter)filtered=filtered.filter(s=>s.name.normalize("NFD").replace(/\p{Diacritic}/gu,"").toUpperCase().startsWith(letter));
+ if(cat.value)filtered=filtered.filter(s=>(s.type||"").toLowerCase().includes(cat.value.toLowerCase()));
+ if(cent.value)filtered=filtered.filter(s=>s.century===cent.value);
+ if(month.value)filtered=filtered.filter(s=>(s.feast||"").toLowerCase().startsWith(month.value.toLowerCase()));
+ if(country.value)filtered=filtered.filter(s=>s.country===country.value);
+ if(source.value==="rich")filtered=filtered.filter(s=>s.rich);
+ if(sort.value==="feast")filtered.sort((a,b)=>(a.feast||"").localeCompare(b.feast||"")||a.name.localeCompare(b.name));
+ else filtered.sort((a,b)=>a.name.localeCompare(b.name));
+ const total=filtered.length,pages=Math.max(1,Math.ceil(total/pageSize)); if(page>pages)page=pages;
+ count.textContent=`${total.toLocaleString()} saints found`;
+ status.textContent=saints.length.toLocaleString()+" catalog entries loaded";
+ const slice=filtered.slice((page-1)*pageSize,page*pageSize);
+ grid.innerHTML=slice.length?slice.map(s=>{
+   const img=imgFor(s);
+   return `<article class="card" data-name="${esc(s.name)}">
+    ${img?`<img class="thumb" src="${esc(img)}" alt="" loading="lazy" decoding="async">`:`<img class="thumb" data-saint-image="${esc(s.name)}" src="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2262%22 height=%2278%22 viewBox=%220 0 62 78%22%3E%3Crect width=%2262%22 height=%2278%22 fill=%22%23101217%22/%3E%3Ctext x=%2231%22 y=%2248%22 text-anchor=%22middle%22 font-size=%2226%22 fill=%22%23c9a227%22%3E%E2%9C%9D%3C/text%3E%3C/svg%3E" alt="" loading="lazy" decoding="async" style="opacity:.72">`}
+    <div><h2>${esc(s.name)}</h2><div class="meta">${esc(s.feast||"Feast day not in catalog")}${s.country?" · "+esc(s.country):""}</div>${s.type?`<span class="tag">${esc(s.type)}</span>`:""}</div>
+   </article>`;
+ }).join(""):`<div style="grid-column:1/-1;text-align:center;padding:4rem;color:var(--muted)">No saints matched your search.</div>`;
+ grid.querySelectorAll(".card").forEach(c=>c.onclick=()=>location.href="saint.html?name="+slug(c.dataset.name));
+ grid.querySelectorAll("img[data-saint-image]").forEach(img=>loadThumb({name:img.dataset.saintImage},img));
+ renderPages(pages);
+}
+function renderPages(pages){
+ const p=document.getElementById("pagination"); if(pages<=1){p.innerHTML="";return}
+ let a=[]; const lo=Math.max(1,page-2),hi=Math.min(pages,page+2);
+ a.push(`<button class="page" ${page===1?"disabled":""} data-p="${page-1}">←</button>`);
+ for(let i=lo;i<=hi;i++)a.push(`<button class="page ${i===page?"active":""}" data-p="${i}">${i}</button>`);
+ a.push(`<button class="page" ${page===pages?"disabled":""} data-p="${page+1}">→</button>`);
+ p.innerHTML=a.join("");p.querySelectorAll(".page").forEach(b=>b.onclick=()=>{if(!b.disabled){page=+b.dataset.p;render();scrollTo({top:0,behavior:"smooth"})}});
+}
+[search,cat,cent,month,country,sort,source].forEach(x=>x.addEventListener("input",()=>{page=1;render()}));
+document.getElementById("randomBtn").onclick=()=>location.href="saint.html?random=1";
+document.getElementById("favoritesBtn").onclick=()=>{search.value="";source.value="rich";page=1;const fav=JSON.parse(localStorage.getItem("acs-favorites")||"[]");filtered=saints.filter(s=>fav.includes(s.name));grid.innerHTML=filtered.map(s=>`<article class="card" onclick="location.href='saint.html?name=${encodeURIComponent(s.name)}'"><div class="thumb placeholder">★</div><div><h2>${esc(s.name)}</h2><div class="meta">Favorite</div></div></article>`).join("")||`<div style="grid-column:1/-1;text-align:center;padding:4rem;color:var(--muted)">No favorites yet.</div>`;count.textContent=`${filtered.length} favorites`;document.getElementById("pagination").innerHTML=""};
+document.getElementById("themeBtn").onclick=()=>{const light=document.body.dataset.light==="1";document.body.dataset.light=light?"0":"1";document.body.style.background=light?"":"#f4f1ea";document.body.style.color=light?"":"#29261f";localStorage.setItem("acs-light",light?"0":"1")};
+if(localStorage.getItem("acs-light")==="1")document.getElementById("themeBtn").click();
+const params=new URLSearchParams(location.search); if(params.get('advanced')==='1'){setTimeout(()=>{search.focus();search.scrollIntoView({behavior:'smooth',block:'center'});},120)} const homeQ=localStorage.getItem('acs-home-search'); if(homeQ){search.value=homeQ;localStorage.removeItem('acs-home-search')} const homeF=localStorage.getItem('acs-home-filter'); if(homeF){cat.value=homeF;localStorage.removeItem('acs-home-filter')} buildFilters();buildAZ();render();
+</script>
+</body>
+</html>
